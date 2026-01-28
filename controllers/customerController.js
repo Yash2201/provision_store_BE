@@ -197,6 +197,18 @@ exports.updateCustomer = async (req, res) => {
       return res.status(400).json({ message: 'Name is required' });
     }
 
+    if (!/^[a-zA-Z\s]+$/.test(name.trim())) {
+      return res.status(400).json({ message: 'Name can only contain letters and spaces' });
+    }
+
+    if (phone && phone.length > 10) {
+      return res.status(400).json({ message: 'Phone number cannot exceed 10 digits' });
+    }
+
+    if (phone && !/^[0-9]*$/.test(phone)) {
+      return res.status(400).json({ message: 'Phone number can only contain digits' });
+    }
+
     // Update or create customer record
     const customer = await Customer.findOneAndUpdate(
       { name: customerName },
